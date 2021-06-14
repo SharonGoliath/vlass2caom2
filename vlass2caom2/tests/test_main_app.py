@@ -84,24 +84,40 @@ TEST_URI = 'ad:TEST_COLLECTION/test_file.fits'
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_DATA_DIR = os.path.join(THIS_DIR, 'data')
 PLUGIN = os.path.join(os.path.dirname(THIS_DIR), 'main_app.py')
-a = 'VLASS1.1.ql.T01t01.J000228-363000.10.2048.' \
-    'v1.I.iter1.image.pbcor.tt0.rms.subim.fits.header'
-b = 'VLASS1.1.ql.T01t01.J000228-363000.10.2048.' \
-    'v1.I.iter1.image.pbcor.tt0.subim.fits.header'
-c = 'VLASS1.1.ql.T10t12.J075402-033000.10.2048.' \
-    'v1.I.iter1.image.pbcor.tt0.rms.subim.fits.header'
-d = 'VLASS1.1.ql.T10t12.J075402-033000.10.2048.' \
-    'v1.I.iter1.image.pbcor.tt0.subim.fits.header'
-e = 'VLASS1.1.ql.T29t05.J110448+763000.10.2048.' \
-    'v1.I.iter1.image.pbcor.tt0.rms.subim.fits.header'
-f = 'VLASS1.1.ql.T29t05.J110448+763000.10.2048.' \
-    'v1.I.iter1.image.pbcor.tt0.subim.fits.header'
+a = (
+    'VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1.I.iter1.image.pbcor.tt0.'
+    'rms.subim.fits.header'
+)
+b = (
+    'VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1.I.iter1.image.pbcor.tt0.'
+    'subim.fits.header'
+)
+c = (
+    'VLASS1.1.ql.T10t12.J075402-033000.10.2048.v1.I.iter1.image.pbcor.tt0.'
+    'rms.subim.fits.header'
+)
+d = (
+    'VLASS1.1.ql.T10t12.J075402-033000.10.2048.v1.I.iter1.image.pbcor.tt0.'
+    'subim.fits.header'
+)
+e = (
+    'VLASS1.1.ql.T29t05.J110448+763000.10.2048.v1.I.iter1.image.pbcor.tt0.'
+    'rms.subim.fits.header'
+)
+f = (
+    'VLASS1.1.ql.T29t05.J110448+763000.10.2048.v1.I.iter1.image.pbcor.tt0.'
+    'subim.fits.header'
+)
 g = 'VLASS1.1.cat.T29t05.J110448+763000.10.2048.v1.csv'
 h = 'VLASS1.1.cc.T29t05.J110448+763000.10.2048.v1.fits.header'
-i = 'VLASS1.2.ql.T07t14.J084202-123000.10.2048.' \
-    'v1.I.iter1.image.pbcor.tt0.rms.subim.fits.header'
-j = 'VLASS1.2.ql.T07t14.J084202-123000.10.2048.' \
-    'v1.I.iter1.image.pbcor.tt0.subim.fits.header'
+i = (
+    'VLASS1.2.ql.T07t14.J084202-123000.10.2048.v1.I.iter1.image.pbcor.tt0.'
+    'rms.subim.fits.header'
+)
+j = (
+    'VLASS1.2.ql.T07t14.J084202-123000.10.2048.v1.I.iter1.image.pbcor.tt0.'
+    'subim.fits.header'
+)
 obs_id_a = 'VLASS1.1.T01t01.J000228-363000'
 obs_id_c = 'VLASS1.1.T10t12.J075402-033000'
 obs_id_e = 'VLASS1.1.T29t05.J110448+763000'
@@ -112,16 +128,20 @@ COLLECTION = 'VLASS'
 features = mc.Features()
 features.supports_catalog = False
 if features.supports_catalog:
-    test_obs = [[obs_id_a, a, b],
-                [obs_id_c, c, d],
-                [obs_id_c + 'r', c.replace('v1', 'v2'), d.replace('v1', 'v2')],
-                [obs_id_e, e, f, g, h],
-                [obs_id_f, i, j]]
+    test_obs = [
+        [obs_id_a, a, b],
+        [obs_id_c, c, d],
+        [obs_id_c + 'r', c.replace('v1', 'v2'), d.replace('v1', 'v2')],
+        [obs_id_e, e, f, g, h],
+        [obs_id_f, i, j],
+    ]
 else:
-    test_obs = [[obs_id_a, a, b],
-                [obs_id_c, c, d],
-                [obs_id_c + 'r', c.replace('v1', 'v2'), d.replace('v1', 'v2')],
-                [obs_id_f, i, j]]
+    test_obs = [
+        [obs_id_a, a, b],
+        [obs_id_c, c, d],
+        [obs_id_c + 'r', c.replace('v1', 'v2'), d.replace('v1', 'v2')],
+        [obs_id_f, i, j],
+    ]
 
 
 @pytest.mark.parametrize('test_files', test_obs)
@@ -141,29 +161,35 @@ def test_main_app(test_files):
     with patch('caom2utils.fits2caom2.CadcDataClient') as data_client_mock:
         def get_file_info(archive, file_id):
             if file_id == a:
-                return {'size': 55425600,
-                        'md5sum': 'ae2a33238c5051611133e7090560fd8a',
-                        'type': 'application/fits'}
+                return {
+                    'size': 55425600,
+                    'md5sum': 'ae2a33238c5051611133e7090560fd8a',
+                    'type': 'application/fits',
+                }
             else:
-                return {'size': 55425600,
-                        'md5sum': '40f7c2763f92ea6e9c6b0304c569097e',
-                        'type': 'application/fits'}
+                return {
+                    'size': 55425600,
+                    'md5sum': '40f7c2763f92ea6e9c6b0304c569097e',
+                    'type': 'application/fits',
+                }
         data_client_mock.return_value.get_file_info.side_effect = \
             get_file_info
 
-        sys.argv = \
-            ('vlass2caom2 --local {} {} -o {} --plugin {} --module {} '
-             '--lineage {}'.format(local, input_param, output_file, PLUGIN,
-                                   PLUGIN, lineage)).split()
+        sys.argv = (
+            f'vlass2caom2 --local {local} {input_param} -o {output_file} '
+            f'--plugin {PLUGIN} --module {PLUGIN} ' '--lineage {lineage}'
+        ).split()
         print(sys.argv)
         to_caom2()
 
     actual = mc.read_obs_from_file(output_file)
     result = get_differences(expected, actual, 'Observation')
     if result:
-        msg = 'Differences found in observation {}\n{}'. \
-            format(expected.observation_id, '\n'.join(
-                [r for r in result]))
+        temp = '\n'.join(r for r in result)
+        msg = (
+            f'Differences found in observation {expected.observation_id}\n'
+            f'{temp}'
+        )
         raise AssertionError(msg)
     # assert False  # cause I want to see logging messages
 
@@ -177,13 +203,16 @@ def _get_local(test_files):
 
 def _get_lineage(obs_id, test_files):
     if obs_id in [obs_id_a, obs_id_c, obs_id_c + 'r', obs_id_f]:
-        return ' '.join(VlassName(fname_on_disk=ii).lineage for ii in
-                        test_files[1:])
+        return ' '.join(
+            VlassName(fname_on_disk=ii).lineage for ii in test_files[1:]
+        )
     else:
         ql_pid = '{}.quicklook'.format(obs_id)
         cat_pid = '{}.catalog'.format(obs_id)
         coarse_pid = '{}.coarsecube'.format(obs_id)
-        return '{}/ad:VLASS/{} {}/ad:VLASS/{} {}/ad:VLASS/{} ' \
-               '{}/ad:VLASS/{}'.format(ql_pid, test_files[1], ql_pid,
-                                       test_files[2], cat_pid, test_files[3],
-                                       coarse_pid, test_files[4])
+        return (
+            f'{ql_pid}/ad:VLASS/{test_files[1]} '
+            f'{ql_pid}/ad:VLASS/{test_files[2]} '
+            f'{cat_pid}/ad:VLASS/{test_files[3]} '
+            f'{coarse_pid}/ad:VLASS/{test_files[4]}'
+        )

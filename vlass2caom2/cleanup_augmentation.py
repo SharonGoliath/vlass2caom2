@@ -83,8 +83,10 @@ def visit(observation, **kwargs):
     mc.check_param(observation, Observation)
     url = kwargs.get('url')
     if url is None:
-        logging.error(f'Require url for cleanup augmentation of '
-                      f'{observation.observation_id}')
+        logging.error(
+            f'Require url for cleanup augmentation of '
+            f'{observation.observation_id}'
+        )
         return
 
     count = 0
@@ -115,20 +117,24 @@ def visit(observation, **kwargs):
                 # need to clean up the preview obs_id-based artifact URIs.
                 # The observation IDs are missing '.ql', so it's a safe
                 # way to find the artifacts to be removed.
-                if (artifact.uri.startswith(
-                        f'ad:VLASS/{observation.observation_id}') and
-                        artifact.uri.endswith('.jpg')):
+                if (
+                    artifact.uri.startswith(
+                        f'ad:VLASS/{observation.observation_id}'
+                    ) and artifact.uri.endswith('.jpg')
+                ):
                     temp.append(artifact.uri)
 
         delete_list = list(set(temp))
         for entry in delete_list:
             logging.warning(
                 f'Removing artifact {entry} from observation '
-                f'{observation.observation_id}, plane {plane.product_id}.')
+                f'{observation.observation_id}, plane {plane.product_id}.'
+            )
             count += 1
             observation.planes[plane.product_id].artifacts.pop(entry)
 
     logging.info(
         f'Completed cleanup augmentation for {observation.observation_id}. '
-        f'Remove {count} artifacts from the observation.')
+        f'Remove {count} artifacts from the observation.'
+    )
     return {'artifacts': count}

@@ -96,8 +96,9 @@ def visit(observation, **kwargs):
     science_file = kwargs.get('science_file')
     if science_file is None:
         raise mc.CadcException(
-            'No science_file parameter provided to vistor '
-            'for obs {}.'.format(observation.observation_id))
+            f'No science_file parameter provided to vistor for obs '
+            f'{observation.observation_id}.'
+        )
     # TODO - this moves location handling structures to other than the
     # main composable code - this could be MUCH better handled, just not
     # sure how right now
@@ -111,10 +112,15 @@ def visit(observation, **kwargs):
                 for chunk in part.chunks:
                     # -t 10 provides a margin of up to 10 pixels
                     cc.exec_footprintfinder(
-                        chunk, science_fqn, log_file_directory,
-                        sn.VlassName.remove_extensions(science_file), '-t 10')
+                        chunk,
+                        science_fqn,
+                        log_file_directory,
+                        sn.VlassName.remove_extensions(science_file),
+                        '-t 10',
+                    )
                     count += 1
 
-    logging.info('Completed footprint augmentation for {}'.format(
-        observation.observation_id))
+    logging.info(
+        f'Completed footprint augmentation for {observation.observation_id}'
+    )
     return {'chunks': count}

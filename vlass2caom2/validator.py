@@ -109,15 +109,22 @@ def read_file_list_from_archive(config):
     ad_resource_id = 'ivo://cadc.nrc.ca/ad'
     agent = '{}/{}'.format(APPLICATION, '1.0')
     subject = net.Subject(certificate=config.proxy_fqn)
-    client = net.BaseWsClient(resource_id=ad_resource_id,
-                              subject=subject, agent=agent, retry=True)
-    query_meta = "SELECT fileName FROM archive_files WHERE " \
-                 "archiveName = '{}'".format(config.archive)
+    client = net.BaseWsClient(
+        resource_id=ad_resource_id,
+        subject=subject,
+        agent=agent,
+        retry=True,
+    )
+    query_meta = (
+        "SELECT fileName FROM archive_files WHERE archiveName = "
+        "'{}'".format(config.archive)
+    )
     data = {'QUERY': query_meta, 'LANG': 'ADQL', 'FORMAT': 'csv'}
     logging.debug('Query is {}'.format(query_meta))
     try:
         response = client.get('https://{}/ad/sync?{}'.format(
-            client.host, parse.urlencode(data)), cert=config.proxy_fqn)
+            client.host, parse.urlencode(data)), cert=config.proxy_fqn
+        )
         if response.status_code == 200:
             # ignore the column name as the first part of the response
             artifact_files_list = response.text.split()[1:]
@@ -129,17 +136,21 @@ def read_file_list_from_archive(config):
 
 
 def read_list_from_caom(config):
-    query = "SELECT A.uri FROM caom2.Observation AS O " \
-            "JOIN caom2.Plane AS P ON O.obsID = P.obsID " \
-            "JOIN caom2.Artifact AS A ON P.planeID = A.planeID " \
-            "WHERE O.collection='{}'".format(config.archive)
+    query = (
+        "SELECT A.uri FROM caom2.Observation AS O "
+        "JOIN caom2.Plane AS P ON O.obsID = P.obsID "
+        "JOIN caom2.Artifact AS A ON P.planeID = A.planeID "
+        "WHERE O.collection='{}'".format(config.archive)
+    )
     subject = net.Subject(certificate=config.proxy_fqn)
     tap_client = CadcTapClient(subject, resource_id=config.tap_id)
     buffer = io.BytesIO()
     tap_client.query(query, output_file=buffer)
     temp = parse_single_table(buffer).to_table()
-    return [ii.decode().replace('ad:{}/'.format(config.archive), '').strip()
-            for ii in temp['uri']]
+    return [
+        ii.decode().replace('ad:{}/'.format(config.archive), '').strip()
+        for ii in temp['uri']
+    ]
 
 
 def read_list_from_nrao(nrao_state_fqn):
@@ -190,8 +201,9 @@ def get_file_url_list_max_versions(nrao_dict):
     # observation ID
     for key, value in nrao_dict.items():
         storage_name = VlassName(url=key)
-        file_meta = FileMeta(key, storage_name.version, value,
-                             storage_name.file_name)
+        file_meta = FileMeta(
+            key, storage_name.version, value, storage_name.file_name
+        )
         obs_id_dict[storage_name.obs_id].append(file_meta)
 
     # now handle the URLs based on how many there are per observation ID
@@ -236,7 +248,8 @@ class VlassValidator(mc.Validator):
         nrao_state_fqn = os.path.join(
             self._config.working_directory, NRAO_STATE)
         validator_list, fully_qualified_list = read_file_url_list_from_nrao(
-            nrao_state_fqn)
+            nrao_state_fqn
+        )
         self._fully_qualified_list = fully_qualified_list
         return validator_list
 
@@ -255,22 +268,25 @@ class VlassValidator(mc.Validator):
         metrics = mc.Metrics(config)
         for entry in self._source:
             if VlassValidator._later_version_at_cadc(
-                    entry, caom_client, metrics):
+                    entry, caom_client, metrics
+            ):
                 self._source.remove(entry)
 
     @staticmethod
     def _later_version_at_cadc(entry, caom_client, metrics):
         later_version_found = False
         storage_name = VlassName(file_name=entry, entry=entry)
-        caom_at_cadc = clc.repo_get(caom_client, COLLECTION,
-                                    storage_name.obs_id, metrics)
+        caom_at_cadc = clc.repo_get(
+            caom_client, COLLECTION, storage_name.obs_id, metrics
+        )
         if caom_at_cadc is not None:
             for plane in caom_at_cadc.planes.values():
                 for artifact in plane.artifacts.values():
                     if 'jpg' in artifact.uri:
                         continue
                     ignore_scheme, ignore_collection, f_name = mc.decompose_uri(
-                        artifact.uri)
+                        artifact.uri
+                    )
                     vlass_name = VlassName(file_name=f_name)
                     if vlass_name.version > storage_name.version:
                         # there's a later version at CADC, everything is good

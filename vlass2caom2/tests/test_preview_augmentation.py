@@ -76,40 +76,49 @@ from test_main_app import TEST_DATA_DIR
 
 def test_preview_augmentation():
     test_fqn = f'{TEST_DATA_DIR}/preview_augmentation_start.xml'
-    test_science_f_name = 'VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1.I.' \
-                          'iter1.image.pbcor.tt0.subim.fits'
+    test_science_f_name = (
+        'VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1.I.iter1.image.pbcor.'
+        'tt0.subim.fits'
+    )
     test_storage_name = sn.VlassName(file_name=test_science_f_name)
     test_obs = mc.read_obs_from_file(test_fqn)
     test_config = mc.Config()
     test_rejected = mc.Rejected(f'{TEST_DATA_DIR}/rejected.yml')
     test_metrics = mc.Metrics(test_config)
     test_observable = mc.Observable(test_rejected, test_metrics)
-    kwargs = {'stream': 'raw',
-              'observable': test_observable,
-              'science_file': test_science_f_name,
-              'working_directory': '/test_files'}
+    kwargs = {
+        'stream': 'raw',
+        'observable': test_observable,
+        'science_file': test_science_f_name,
+        'working_directory': '/test_files',
+    }
     test_subject = preview_augmentation.VlassPreview(test_obs, **kwargs)
     assert test_subject is not None, 'need a test subject'
     assert len(test_obs.planes) == 1, 'wrong number of planes'
-    assert len(test_obs.planes[test_storage_name.product_id].artifacts) == 4, \
-        'wrong starting # of artifacts'
+    assert (
+        len(test_obs.planes[test_storage_name.product_id].artifacts) == 4
+    ), 'wrong starting # of artifacts'
     test_result = test_subject.visit(test_obs, test_storage_name)
     assert test_result is not None, 'expect a result'
     assert test_result.get('artifacts') == 2, 'wrong result'
-    assert len(test_obs.planes[test_storage_name.product_id].artifacts) == 6, \
-        'wrong ending # of artifacts'
+    assert (
+        len(test_obs.planes[test_storage_name.product_id].artifacts) == 6
+    ), 'wrong ending # of artifacts'
 
     # does artifact re-naming work?
-    test_url = f'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.1/' \
-               f'T01t01/VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1/' \
-               f'{test_science_f_name}'
+    test_url = (
+        f'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.1/' \
+        f'T01t01/VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1/' \
+        f'{test_science_f_name}'
+    )
     kwargs = {'url': test_url}
     test_result = cleanup_augmentation.visit(test_obs, **kwargs)
     test_artifacts = test_obs.planes[test_storage_name.product_id].artifacts
     assert test_result is not None, 'expect a result'
     assert 'artifacts' in test_result, 'expect artifact count'
-    assert test_result['artifacts'] == 2, f'actual deleted count ' \
-                                          f'{test_result["artifacts"]}'
+    assert (
+        test_result['artifacts'] == 2
+    ), f'actual deleted count {test_result["artifacts"]}'
     assert len(test_artifacts) == 4, 'wrong ending conditions'
     assert test_storage_name.prev_uri in test_artifacts, 'missing preview'
     assert test_storage_name.thumb_uri in test_artifacts, 'missing thumbnail'

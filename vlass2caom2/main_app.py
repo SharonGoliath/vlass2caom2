@@ -217,8 +217,10 @@ def update(observation, **kwargs):
 
         for product_id in plane_ids_to_delete:
             # change handling of product ids - remove the version number
-            logging.warning('Removing plane {} from {}'.format(
-                product_id, observation.observation_id))
+            logging.warning(
+                f'Removing plane {product_id} from '
+                f'{observation.observation_id}'
+            )
             observation.planes.pop(product_id)
         logging.debug('Done update.')
         return observation
@@ -227,7 +229,8 @@ def update(observation, **kwargs):
         logging.debug(tb)
         logging.error(e)
         logging.error(
-            'Terminating ingestion for {}'.format(observation.observation_id))
+            'Terminating ingestion for {}'.format(observation.observation_id)
+        )
         return None
 
 

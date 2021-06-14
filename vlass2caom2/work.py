@@ -99,8 +99,10 @@ def init_web_log(state, config):
     for key, value in epochs.items():
         epochs[key] = make_time(value)
     if mc.TaskType.SCRAPE in config.task_types:
-        logging.warning('No weblog listing from NRAO. No time and provenance '
-                        'metadata generated.')
+        logging.warning(
+            'No weblog listing from NRAO. No time and provenance metadata '
+            'generated.'
+        )
     else:
         logging.info('Initialize weblog listing from NRAO.')
         scrape.init_web_log_content(epochs)

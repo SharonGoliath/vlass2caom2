@@ -86,8 +86,9 @@ import test_scrape
 @patch('caom2pipe.execute_composable.CaomExecute._fits2caom2_cmd')
 @patch('caom2pipe.client_composable.CAOM2RepoClient')
 @patch('caom2pipe.client_composable.CadcDataClient')
-def test_run_by_builder(data_client_mock, repo_mock, exec_mock,
-                        query_endpoint_mock):
+def test_run_by_builder(
+    data_client_mock, repo_mock, exec_mock, query_endpoint_mock
+):
     query_endpoint_mock.side_effect = test_scrape._query_endpoint
     repo_mock.return_value.read.side_effect = _mock_repo_read
     repo_mock.return_value.create.side_effect = Mock()
@@ -103,8 +104,10 @@ def test_run_by_builder(data_client_mock, repo_mock, exec_mock,
     test_config = mc.Config()
     test_config.get_executors()
 
-    test_f_name = 'VLASS1.2.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.' \
-                  'image.pbcor.tt0.subim.fits'
+    test_f_name = (
+        'VLASS1.2.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.'
+        'tt0.subim.fits'
+    )
     with open(test_config.work_fqn, 'w') as f:
         f.write(f'{test_f_name}\n')
 
@@ -175,8 +178,10 @@ def test_run_state(run_mock, query_mock, data_client_mock):
 
     test_obs_id = 'VLASS2.1.T07t13.J083838-153000'
     test_product_id = 'VLASS2.1.T07t13.J083838-153000.quicklook'
-    test_f_name = 'VLASS2.1.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.' \
-                  'image.pbcor.tt0.rms.subim.fits'
+    test_f_name = (
+        'VLASS2.1.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.'
+        'tt0.rms.subim.fits'
+    )
     try:
         # execution
         test_result = composable._run_by_state()
@@ -193,12 +198,15 @@ def test_run_state(run_mock, query_mock, data_client_mock):
         assert test_storage.file_name == test_f_name, 'wrong file name'
         assert test_storage.fname_on_disk == test_f_name, 'wrong fname on disk'
         assert test_storage.url.startswith(
-            'https://archive-new.nrao.edu/vlass/quicklook/VLASS'), \
-            f'wrong url start format {test_storage.url}'
-        assert test_storage.url.endswith('.fits'), \
-            f'wrong url end format {test_storage.url}'
-        assert test_storage.lineage == f'{test_product_id}/ad:{COLLECTION}/' \
-                                       f'{test_f_name}', 'wrong lineage'
+            'https://archive-new.nrao.edu/vlass/quicklook/VLASS'
+        ), f'wrong url start format {test_storage.url}'
+        assert (
+            test_storage.url.endswith('.fits')
+        ), f'wrong url end format {test_storage.url}'
+        assert (
+            test_storage.lineage == f'{test_product_id}/ad:{COLLECTION}/'
+                                    f'{test_f_name}'
+        ), 'wrong lineage'
         assert test_storage.external_urls is None, 'wrong external urls'
     finally:
         os.getcwd = getcwd_orig
@@ -210,8 +218,13 @@ def test_run_state(run_mock, query_mock, data_client_mock):
 @patch('caom2pipe.client_composable.CAOM2RepoClient')
 @patch('caom2pipe.client_composable.CadcDataClient')
 @patch('cadcdata.CadcDataClient.get_file_info')
-def test_run_state_rc(get_file_info_mock, data_client_mock,
-                      repo_client_mock, query_mock, to_caom2_mock):
+def test_run_state_rc(
+    get_file_info_mock,
+    data_client_mock,
+    repo_client_mock,
+    query_mock,
+    to_caom2_mock,
+):
     test_scrape._write_state('24Apr2019 12:34')
     query_mock.side_effect = test_scrape._query_endpoint
     repo_client_mock.return_value.read.return_value = None
@@ -227,8 +240,9 @@ def test_run_state_rc(get_file_info_mock, data_client_mock,
         assert to_caom2_mock.called, 'to_caom2 called'
         assert query_mock.called, 'what about you?'
         args, kwargs = query_mock.call_args
-        assert args[0].startswith('https://archive-new.nrao.edu/'), \
-            'should be a URL'
+        assert (
+            args[0].startswith('https://archive-new.nrao.edu/')
+        ), 'should be a URL'
     finally:
         os.getcwd = getcwd_orig
 
@@ -238,19 +252,26 @@ def test_store(put_mock):
     test_config = mc.Config()
     test_config.logging_level = 'ERROR'
     test_config.working_directory = '/tmp'
-    test_url = 'https://archive-new.nrao.edu/vlass/quicklook/VLASS2.1/' \
-               'T10t12/VLASS2.1.ql.T10t12.J073401-033000.10.2048.v1/' \
-               'VLASS2.1.ql.T10t12.J073401-033000.10.2048.v1.I.iter1.image.' \
-               'pbcor.tt0.rms.subim.fits'
+    test_url = (
+        'https://archive-new.nrao.edu/vlass/quicklook/VLASS2.1/'
+        'T10t12/VLASS2.1.ql.T10t12.J073401-033000.10.2048.v1/'
+        'VLASS2.1.ql.T10t12.J073401-033000.10.2048.v1.I.iter1.image.'
+        'pbcor.tt0.rms.subim.fits'
+    )
     test_storage_name = VlassName(url=test_url, entry=test_url)
-    import logging
-    logging.error(test_storage_name)
     transferrer = Mock()
     cadc_data_client = Mock()
     observable = mc.Observable(
-        mc.Rejected('/tmp/rejected.yml'), mc.Metrics(test_config))
-    test_subject = ec.Store(test_config, test_storage_name, APPLICATION,
-                            cadc_data_client, observable, transferrer)
+        mc.Rejected('/tmp/rejected.yml'), mc.Metrics(test_config)
+    )
+    test_subject = ec.Store(
+        test_config,
+        test_storage_name,
+        APPLICATION,
+        cadc_data_client,
+        observable,
+        transferrer,
+    )
     test_subject.execute(None)
     assert put_mock.called, 'expect a call'
     args, kwargs = put_mock.call_args
@@ -258,16 +279,19 @@ def test_store(put_mock):
     assert transferrer.get.called, 'expect a transfer call'
     args, kwargs = transferrer.get.call_args
     assert args[0] == test_url, 'wrong source parameter'
-    assert args[1] == f'/tmp/{test_storage_name.obs_id}/' \
-                      f'{test_storage_name.file_name}',\
-        'wrong destination parameter'
+    assert (
+        args[1] == f'/tmp/{test_storage_name.obs_id}/'
+                   f'{test_storage_name.file_name}'
+    ),'wrong destination parameter'
 
 
 def _cmd_direct_mock():
     from caom2 import SimpleObservation, Algorithm
-    obs = SimpleObservation(observation_id='VLASS1.2.T07t13.J083838-153000',
-                            collection=COLLECTION,
-                            algorithm=Algorithm(name='testing'))
+    obs = SimpleObservation(
+        observation_id='VLASS1.2.T07t13.J083838-153000',
+        collection=COLLECTION,
+        algorithm=Algorithm(name='testing'),
+    )
     mc.write_obs_to_file(
         obs,
         os.path.join(
@@ -299,15 +323,10 @@ def _mock_repo_update():
 
 
 def _mock_get_cadc_headers(archive, file_id):
-    import logging
-    logging.error(f'\n\n\nmock get cadc headers\n\n\n')
     return {'md5sum': 'md5:abc123'}
 
 
 def _mock_x(archive, file_id, b, fhead):
-    import logging
-    logging.error(f'{archive} {file_id} {fhead}')
-    logging.error(f'\n\n\ncalled called called \n\n\n')
     from astropy.io import fits
     x = """SIMPLE  =                    T / Written by IDL:  Fri Oct  6 01:48:35 2017
 BITPIX  =                  -32 / Bits per pixel
@@ -319,15 +338,16 @@ TYPE    = 'image  '
 END
 """
     delim = '\nEND'
-    extensions = \
-        [e + delim for e in x.split(delim) if e.strip()]
+    extensions = [e + delim for e in x.split(delim) if e.strip()]
     headers = [fits.Header.fromstring(e, sep='\n') for e in extensions]
     return headers
 
 
 def _write_obs_mock():
     args = get_gen_proc_arg_parser().parse_args()
-    obs = SimpleObservation(collection=args.observation[0],
-                            observation_id=args.observation[1],
-                            algorithm=Algorithm(name='exposure'))
+    obs = SimpleObservation(
+        collection=args.observation[0],
+        observation_id=args.observation[1],
+        algorithm=Algorithm(name='exposure'),
+    )
     mc.write_obs_to_file(obs, args.out_obs_xml)

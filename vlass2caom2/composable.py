@@ -83,8 +83,9 @@ from vlass2caom2 import preview_augmentation
 
 VLASS_BOOKMARK = 'vlass_timestamp'
 
-META_VISITORS = [time_bounds_augmentation, quality_augmentation,
-                 cleanup_augmentation]
+META_VISITORS = [
+    time_bounds_augmentation, quality_augmentation, cleanup_augmentation
+]
 DATA_VISITORS = [position_bounds_augmentation, preview_augmentation]
 
 
@@ -98,12 +99,14 @@ def _run_single():
         vlass_name = sn.VlassName(url=sys.argv[1], entry=sys.argv[1])
     else:
         vlass_name = sn.VlassName(obs_id=sys.argv[1], entry=sys.argv[1])
-    return rc.run_single(config=config,
-                         storage_name=vlass_name,
-                         command_name=sn.APPLICATION,
-                         meta_visitors=META_VISITORS,
-                         data_visitors=DATA_VISITORS,
-                         store_transfer=tc.HttpTransfer())
+    return rc.run_single(
+        config=config,
+        storage_name=vlass_name,
+        command_name=sn.APPLICATION,
+        meta_visitors=META_VISITORS,
+        data_visitors=DATA_VISITORS,
+        store_transfer=tc.HttpTransfer(),
+    )
 
 
 def run_single():
@@ -139,15 +142,17 @@ def _run_by_state():
     # still make all subsequent calls if len == 0, for consistent reporting
     source = data_source.NraoPage(todo_list)
     name_builder = builder.VlassInstanceBuilder(config)
-    return rc.run_by_state(config=config,
-                           command_name=sn.APPLICATION,
-                           bookmark_name=VLASS_BOOKMARK,
-                           meta_visitors=META_VISITORS,
-                           data_visitors=DATA_VISITORS,
-                           name_builder=name_builder,
-                           source=source,
-                           end_time=max_date,
-                           store_transfer=tc.HttpTransfer())
+    return rc.run_by_state(
+        config=config,
+        command_name=sn.APPLICATION,
+        bookmark_name=VLASS_BOOKMARK,
+        meta_visitors=META_VISITORS,
+        data_visitors=DATA_VISITORS,
+        name_builder=name_builder,
+        source=source,
+        end_time=max_date,
+        store_transfer=tc.HttpTransfer(),
+    )
 
 
 def run_by_state():
@@ -176,12 +181,14 @@ def _run():
     state = mc.State(config.state_fqn)
     work.init_web_log(state, config)
     name_builder = builder.VlassInstanceBuilder(config)
-    return rc.run_by_todo(config=config,
-                          name_builder=name_builder,
-                          command_name=sn.APPLICATION,
-                          meta_visitors=META_VISITORS,
-                          data_visitors=DATA_VISITORS,
-                          store_transfer=tc.HttpTransfer())
+    return rc.run_by_todo(
+        config=config,
+        name_builder=name_builder,
+        command_name=sn.APPLICATION,
+        meta_visitors=META_VISITORS,
+        data_visitors=DATA_VISITORS,
+        store_transfer=tc.HttpTransfer(),
+    )
 
 
 def run():

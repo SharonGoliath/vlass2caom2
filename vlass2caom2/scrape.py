@@ -80,9 +80,16 @@ from bs4 import BeautifulSoup
 
 from caom2pipe import manage_composable as mc
 
-__all__ = ['build_good_todo', 'make_date_time', 'retrieve_obs_metadata',
-           'build_qa_rejected_todo', 'query_top_page',
-           'list_files_on_page', 'build_file_url_list', 'build_url_list']
+__all__ = [
+    'build_file_url_list',
+    'build_good_todo',
+    'build_qa_rejected_todo',
+    'build_url_list',
+    'list_files_on_page',
+    'make_date_time',
+    'query_top_page',
+    'retrieve_obs_metadata',
+]
 
 
 QL_URL = 'https://archive-new.nrao.edu/vlass/quicklook/'
@@ -92,8 +99,10 @@ web_log_content = {}
 
 
 def make_date_time(from_str):
-    for fmt in ['%d%b%Y %H:%M', '%Y-%m-%d %H:%M', '%Y%m%d %H:%M',
-                '%d-%b-%Y %H:%M', '%Y_%m_%dT%H_%M_%S.%f']:
+    for fmt in [
+        '%d%b%Y %H:%M', '%Y-%m-%d %H:%M', '%Y%m%d %H:%M',
+                '%d-%b-%Y %H:%M', '%Y_%m_%dT%H_%M_%S.%f',
+    ]:
         try:
             dt = datetime.strptime(from_str, fmt)
             break
@@ -345,16 +354,21 @@ def build_qa_rejected_todo(start_date, session):
                         )
                     else:
                         temp, rejected_max = _parse_rejected_page(
-                            response.text, epoch_name, start_date,
-                            epoch_rejected_url)
+                            response.text,
+                            epoch_name,
+                            start_date,
+                            epoch_rejected_url,
+                        )
                         max_date = max(start_date, rejected_max)
                         response.close()
                         temp_rejected = rejected
                         rejected = {**temp, **temp_rejected}
                 except mc.CadcException as e:
                     if 'Not Found for url' in str(e):
-                        logging.info(f'No QA_REJECTED directory for '
-                                     f'{epoch_name}. Continuing.')
+                        logging.info(
+                            f'No QA_REJECTED directory for {epoch_name}. '
+                            f'Continuing.'
+                        )
                     else:
                         raise e
     finally:
@@ -524,8 +538,9 @@ def retrieve_obs_metadata(obs_id):
             if response is None:
                 logging.error(f'Could not query {obs_url}')
             else:
-                pipeline_bit = _parse_for_reference(response.text,
-                                                    'pipeline-')
+                pipeline_bit = _parse_for_reference(
+                    response.text, 'pipeline-'
+                )
                 response.close()
                 if pipeline_bit is None:
                     logging.error(f'Did not find pipeline on {obs_url}')

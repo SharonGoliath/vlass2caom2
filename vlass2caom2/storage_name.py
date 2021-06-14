@@ -87,8 +87,14 @@ class VlassName(mc.StorageName):
     because some of the URLs are from the QA_REJECTED directories, hence
     the absence of that functionality in this class.
     """
-    def __init__(self, obs_id=None, file_name=None, fname_on_disk=None,
-                 url=None, entry=None):
+    def __init__(
+        self,
+        obs_id=None,
+        file_name=None,
+        fname_on_disk=None,
+        url=None,
+        entry=None,
+    ):
         if obs_id is None:
             if file_name is not None:
                 obs_id = VlassName.get_obs_id_from_file_name(file_name)
@@ -98,7 +104,8 @@ class VlassName(mc.StorageName):
                 obs_id = VlassName.get_obs_id_from_file_name(
                     url.split('/')[-1])
         super(VlassName, self).__init__(
-            obs_id, COLLECTION, COLLECTION_PATTERN, entry=entry)
+            obs_id, COLLECTION, COLLECTION_PATTERN, entry=entry
+        )
         product_id = None
         if file_name is not None:
             product_id = VlassName.get_product_id_from_file_name(file_name)
@@ -106,7 +113,8 @@ class VlassName(mc.StorageName):
             product_id = VlassName.get_product_id_from_file_name(fname_on_disk)
         elif url is not None:
             product_id = VlassName.get_product_id_from_file_name(
-                url.split('/')[-1])
+                url.split('/')[-1]
+            )
         self._product_id = product_id
         self.file_name = file_name
         if file_name is None:
@@ -160,8 +168,10 @@ class VlassName(mc.StorageName):
     @property
     def image_pointing_url(self):
         bits = self._file_name.split('.')
-        return f'{self.tile_url}{self.epoch}.ql.{self.tile}.{bits[4]}.' \
-               f'{bits[5]}.{bits[6]}.{bits[7]}/'
+        return (
+            f'{self.tile_url}{self.epoch}.ql.{self.tile}.{bits[4]}.'
+            f'{bits[5]}.{bits[6]}.{bits[7]}/'
+        )
 
     @property
     def prev(self):

@@ -84,13 +84,15 @@ def visit(observation, **kwargs):
     cadc_client = kwargs.get('cadc_client')
     count = 0
     if cadc_client is None:
-        logging.warning('No cadc_client parameter, no connection for input '
-                        'metadata. Stopping time_bounds_augmentation.')
+        logging.warning(
+            'No cadc_client parameter, no connection for input metadata. '
+            'Stopping time_bounds_augmentation.'
+        )
 
     else:
         # conversation with JJK, 2018-08-08 - until such time as VLASS becomes
-        # a dynamic collection, rely on the time information as provided for all
-        # observations as retrieved on this date from:
+        # a dynamic collection, rely on the time information as provided for
+        # all observations as retrieved on this date from:
         #
         # https://archive-new.nrao.edu/vlass/weblog/quicklook/*
 
@@ -106,8 +108,10 @@ def visit(observation, **kwargs):
                     if reference is not None:
                         plane.provenance.reference = reference
                         count += 1
-        logging.info(f'Completed time bounds augmentation for '
-                     f'{observation.observation_id}')
+        logging.info(
+            f'Completed time bounds augmentation for '
+            f'{observation.observation_id}'
+        )
         global obs_metadata
         obs_metadata = None
     return {'artifacts': count}
@@ -128,7 +132,8 @@ def _augment_artifact(obs_id, artifact):
         bounds, exposure = _build_time(
             obs_metadata.get('Observation Start'),
             obs_metadata.get('Observation End'),
-            obs_metadata.get('On Source'))
+            obs_metadata.get('On Source'),
+        )
         version = obs_metadata.get('Pipeline Version')
         reference = obs_metadata.get('reference')
         found = True
@@ -155,8 +160,9 @@ def _build_time(start, end, tos):
         end_date.format = 'mjd'
         start_ref_coord = RefCoord(0.5, start_date.value)
         end_ref_coord = RefCoord(1.5, end_date.value)
-        bounds.samples.append(CoordRange1D(start_ref_coord,
-                                           end_ref_coord))
+        bounds.samples.append(
+            CoordRange1D(start_ref_coord, end_ref_coord)
+        )
     exposure = None
     if tos is not None:
         exposure = float(ac.get_timedelta_in_s(tos))
