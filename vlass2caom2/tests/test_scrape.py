@@ -239,7 +239,7 @@ def test_qa_rejected_bits():
             test_content,
             'VLASS1.2',
             TEST_START_TIME,
-            '{}VLASS1.2/QA_REJECTED/'.format(scrape.QL_URL),
+            f'{scrape.QL_URL}VLASS1.2/QA_REJECTED/',
         )
         assert test_result is not None, 'expected a result'
         assert len(test_result) == 1, 'wrong number of results'
@@ -275,9 +275,8 @@ def test_visit(query_endpoint_mock, get_mock):
     query_endpoint_mock.side_effect = _query_endpoint
     scrape.init_web_log_content({'VLASS1.2': TEST_START_TIME})
     scrape.web_log_content[test_id] = TEST_START_TIME - timedelta(hours=1)
-    test_obs = mc.read_obs_from_file(
-        '{}.xml'.format(os.path.join(TEST_DATA_DIR, TEST_OBS_ID))
-    )
+    test_fqn = os.path.join(TEST_DATA_DIR, TEST_OBS_ID)
+    test_obs = mc.read_obs_from_file(f'{test_fqn}.xml')
     kwargs = {'cadc_client': Mock()}
     test_result = time_bounds_augmentation.visit(test_obs, **kwargs)
     assert test_result is not None, 'expected a result'
@@ -564,7 +563,7 @@ def _query_endpoint(url, session, timeout=-1):
         with open(ALL_FIELDS) as f:
             result.text = f.read()
     else:
-        raise Exception('wut? {} {}'.format(url, len(url.split('/'))))
+        raise Exception(f'wut? {url}')
     return result
 
 

@@ -147,15 +147,15 @@ else:
 @pytest.mark.parametrize('test_files', test_obs)
 def test_main_app(test_files):
     obs_id = test_files[0]
-    obs_path = os.path.join(TEST_DATA_DIR, '{}.xml'.format(obs_id))
+    obs_path = os.path.join(TEST_DATA_DIR, f'{obs_id}.xml')
     expected = mc.read_obs_from_file(obs_path)
     if obs_id.endswith('r'):
-        obs_path = os.path.join(TEST_DATA_DIR, '{}.in.xml'.format(obs_id))
-        input_param = '--in {}'.format(obs_path)
+        obs_path = os.path.join(TEST_DATA_DIR, f'{obs_id}.in.xml')
+        input_param = f'--in {obs_path}'
     else:
-        input_param = '--observation {} {}'.format(COLLECTION, obs_id)
+        input_param = f'--observation {COLLECTION} {obs_id}'
     lineage = _get_lineage(obs_id, test_files)
-    output_file = '{}.actual.xml'.format(obs_id)
+    output_file = f'{obs_id}.actual.xml'
     local = _get_local(test_files[1:])
 
     with patch('caom2utils.fits2caom2.CadcDataClient') as data_client_mock:
@@ -177,7 +177,7 @@ def test_main_app(test_files):
 
         sys.argv = (
             f'vlass2caom2 --local {local} {input_param} -o {output_file} '
-            f'--plugin {PLUGIN} --module {PLUGIN} ' '--lineage {lineage}'
+            f'--plugin {PLUGIN} --module {PLUGIN} --lineage {lineage}'
         ).split()
         print(sys.argv)
         to_caom2()
@@ -197,7 +197,7 @@ def test_main_app(test_files):
 def _get_local(test_files):
     result = ''
     for test_name in test_files:
-        result = '{} {}/{}'.format(result, TEST_DATA_DIR, test_name)
+        result = f'{result} {TEST_DATA_DIR}/{test_name}'
     return result
 
 
@@ -207,9 +207,9 @@ def _get_lineage(obs_id, test_files):
             VlassName(fname_on_disk=ii).lineage for ii in test_files[1:]
         )
     else:
-        ql_pid = '{}.quicklook'.format(obs_id)
-        cat_pid = '{}.catalog'.format(obs_id)
-        coarse_pid = '{}.coarsecube'.format(obs_id)
+        ql_pid = f'{obs_id}.quicklook'
+        cat_pid = f'{obs_id}.catalog'
+        coarse_pid = f'{obs_id}.coarsecube'
         return (
             f'{ql_pid}/ad:VLASS/{test_files[1]} '
             f'{ql_pid}/ad:VLASS/{test_files[2]} '
