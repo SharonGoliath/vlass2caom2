@@ -107,8 +107,8 @@ def test_preview_augmentation():
 
     # does artifact re-naming work?
     test_url = (
-        f'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.1/' \
-        f'T01t01/VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1/' \
+        f'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.1/'
+        f'T01t01/VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1/'
         f'{test_science_f_name}'
     )
     kwargs = {'url': test_url}

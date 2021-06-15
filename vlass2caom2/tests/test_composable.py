@@ -93,8 +93,9 @@ def test_run_by_builder(
     repo_mock.return_value.read.side_effect = _mock_repo_read
     repo_mock.return_value.create.side_effect = Mock()
     repo_mock.return_value.update.side_effect = _mock_repo_update
-    data_client_mock.return_value.get_file_info.side_effect = \
+    data_client_mock.return_value.get_file_info.side_effect = (
         _mock_get_file_info
+    )
 
     exec_mock.side_effect = _cmd_direct_mock
 
@@ -166,8 +167,9 @@ def test_run_state(run_mock, query_mock, data_client_mock):
     test_scrape._write_state('24Apr2019 12:34')
     query_mock.side_effect = _mock_file_url_list
     run_mock.return_value = 0
-    data_client_mock.return_value.get_file_info.side_effect = \
+    data_client_mock.return_value.get_file_info.side_effect = (
         _mock_get_file_info
+    )
     getcwd_orig = os.getcwd
     os.getcwd = Mock(return_value=test_main_app.TEST_DATA_DIR)
     orig_client = CadcTapClient.__init__
@@ -200,12 +202,12 @@ def test_run_state(run_mock, query_mock, data_client_mock):
         assert test_storage.url.startswith(
             'https://archive-new.nrao.edu/vlass/quicklook/VLASS'
         ), f'wrong url start format {test_storage.url}'
-        assert (
-            test_storage.url.endswith('.fits')
+        assert test_storage.url.endswith(
+            '.fits'
         ), f'wrong url end format {test_storage.url}'
         assert (
             test_storage.lineage == f'{test_product_id}/ad:{COLLECTION}/'
-                                    f'{test_f_name}'
+            f'{test_f_name}'
         ), 'wrong lineage'
         assert test_storage.external_urls is None, 'wrong external urls'
     finally:
@@ -240,8 +242,8 @@ def test_run_state_rc(
         assert to_caom2_mock.called, 'to_caom2 called'
         assert query_mock.called, 'what about you?'
         args, kwargs = query_mock.call_args
-        assert (
-            args[0].startswith('https://archive-new.nrao.edu/')
+        assert args[0].startswith(
+            'https://archive-new.nrao.edu/'
         ), 'should be a URL'
     finally:
         os.getcwd = getcwd_orig
@@ -281,12 +283,13 @@ def test_store(put_mock):
     assert args[0] == test_url, 'wrong source parameter'
     assert (
         args[1] == f'/tmp/{test_storage_name.obs_id}/'
-                   f'{test_storage_name.file_name}'
-    ),'wrong destination parameter'
+        f'{test_storage_name.file_name}'
+    ), 'wrong destination parameter'
 
 
 def _cmd_direct_mock():
     from caom2 import SimpleObservation, Algorithm
+
     obs = SimpleObservation(
         observation_id='VLASS1.2.T07t13.J083838-153000',
         collection=COLLECTION,
@@ -296,8 +299,8 @@ def _cmd_direct_mock():
         obs,
         os.path.join(
             test_main_app.TEST_DATA_DIR,
-            'logs/VLASS1.2.T07t13.J083838-153000.xml'
-        )
+            'logs/VLASS1.2.T07t13.J083838-153000.xml',
+        ),
     )
 
 
@@ -328,6 +331,7 @@ def _mock_get_cadc_headers(archive, file_id):
 
 def _mock_x(archive, file_id, b, fhead):
     from astropy.io import fits
+
     x = """SIMPLE  =                    T / Written by IDL:  Fri Oct  6 01:48:35 2017
 BITPIX  =                  -32 / Bits per pixel
 NAXIS   =                    2 / Number of dimensions

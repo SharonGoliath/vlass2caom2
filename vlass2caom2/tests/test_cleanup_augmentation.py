@@ -93,6 +93,6 @@ def test_visit():
     assert test_result is not None, 'expect a result'
     assert 'artifacts' in test_result, 'expect artifact count'
     assert (
-       test_result['artifacts'] == 2
+        test_result['artifacts'] == 2
     ), f'actual deleted count {test_result["artifacts"]}'
     assert len(test_artifacts) == 2, 'wrong ending conditions'

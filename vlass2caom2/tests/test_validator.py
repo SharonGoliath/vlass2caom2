@@ -156,8 +156,8 @@ def test_validator(http_mock, caps_mock, post_mock, repo_get_mock):
         assert os.path.exists(test_listing_fqn), 'should create file record'
 
         test_subject.write_todo()
-        assert (
-            os.path.exists(test_subject._config.work_fqn)
+        assert os.path.exists(
+            test_subject._config.work_fqn
         ), 'should create file record'
         with open(test_subject._config.work_fqn, 'r') as f:
             content = f.readlines()
@@ -186,7 +186,7 @@ def test_validator(http_mock, caps_mock, post_mock, repo_get_mock):
 
 def test_multiple_versions():
     with open(
-            f'{test_main_app.TEST_DATA_DIR}/multiple_versions_tile.html', 'r'
+        f'{test_main_app.TEST_DATA_DIR}/multiple_versions_tile.html', 'r'
     ) as f:
         test_string = f.read()
     test_start_date = datetime.strptime('2018-01-01', '%Y-%m-%d')
@@ -205,8 +205,10 @@ def test_multiple_versions():
         )
         test_content[test_key1] = value.timestamp()
         test_content[test_key2] = value.timestamp()
-    test_result, test_validate_dict_result = \
-        validator.get_file_url_list_max_versions(test_content)
+    (
+        test_result,
+        test_validate_dict_result,
+    ) = validator.get_file_url_list_max_versions(test_content)
     assert test_result is not None, 'expect a test result'
     assert test_validate_dict_result is not None, 'expect a test result'
     assert len(test_result) == 82, 'wrong test result len'

@@ -87,9 +87,7 @@ def test_storage_name():
         ), 'wrong fname on disk'
         assert ts.file_name == f'{test_bit}.subim.fits', 'wrong fname'
         assert ts.file_id == f'{test_bit}.subim', 'wrong fid'
-        assert (
-           ts.file_uri == f'ad:VLASS/{test_bit}.subim.fits'
-        ), 'wrong uri'
+        assert ts.file_uri == f'ad:VLASS/{test_bit}.subim.fits', 'wrong uri'
         assert (
             ts.model_file_name == 'VLASS1.2.T23t09.J083851+483000.xml'
         ), 'wrong model name'
@@ -97,22 +95,21 @@ def test_storage_name():
             ts.log_file == 'VLASS1.2.T23t09.J083851+483000.log'
         ), 'wrong log file'
         assert (
-            sn.VlassName.remove_extensions(ts.file_name) ==
-            f'{test_bit}.subim'
+            sn.VlassName.remove_extensions(ts.file_name) == f'{test_bit}.subim'
         ), 'wrong extensions'
         assert ts.epoch == 'VLASS1.2', 'wrong epoch'
         assert (
             ts.tile_url == 'https://archive-new.nrao.edu/vlass/quicklook/'
-                           'VLASS1.2/T23t09/'
+            'VLASS1.2/T23t09/'
         ), 'wrong tile url'
         assert (
             ts.rejected_url == 'https://archive-new.nrao.edu/vlass/'
-                               'quicklook/VLASS1.2/QA_REJECTED/'
+            'quicklook/VLASS1.2/QA_REJECTED/'
         ), 'wrong rejected url'
         assert (
             ts.image_pointing_url == 'https://archive-new.nrao.edu/vlass/'
-                                     'quicklook/VLASS1.2/T23t09/VLASS1.2.ql.'
-                                     'T23t09.J083851+483000.10.2048.v1/'
+            'quicklook/VLASS1.2/T23t09/VLASS1.2.ql.'
+            'T23t09.J083851+483000.10.2048.v1/'
         ), 'wrong image pointing url'
         assert ts.prev == f'{test_bit}.subim_prev.jpg', 'wrong preview'
         assert ts.thumb == f'{test_bit}.subim_prev_256.jpg', 'wrong thumbnail'

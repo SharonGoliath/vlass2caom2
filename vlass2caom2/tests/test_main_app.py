@@ -159,6 +159,7 @@ def test_main_app(test_files):
     local = _get_local(test_files[1:])
 
     with patch('caom2utils.fits2caom2.CadcDataClient') as data_client_mock:
+
         def get_file_info(archive, file_id):
             if file_id == a:
                 return {
@@ -172,8 +173,8 @@ def test_main_app(test_files):
                     'md5sum': '40f7c2763f92ea6e9c6b0304c569097e',
                     'type': 'application/fits',
                 }
-        data_client_mock.return_value.get_file_info.side_effect = \
-            get_file_info
+
+        data_client_mock.return_value.get_file_info.side_effect = get_file_info
 
         sys.argv = (
             f'vlass2caom2 --local {local} {input_param} -o {output_file} '
