@@ -105,7 +105,11 @@ def visit(observation, **kwargs):
     # sure how right now
     log_file_directory = kwargs.get('log_file_directory')
 
-    science_fqn = os.path.join(working_dir, science_file)
+    # the science file is from StorageName.source_names, which in this case
+    # may be a URL or a file name. The VlassName constructor will figure
+    # that out, and handle it correctly.
+    vlass_name = sn.VlassName(science_file)
+    science_fqn = os.path.join(working_dir, vlass_name.file_name)
     count = 0
     for plane in observation.planes.values():
         for artifact in plane.artifacts.values():
@@ -116,7 +120,7 @@ def visit(observation, **kwargs):
                         chunk,
                         science_fqn,
                         log_file_directory,
-                        sn.VlassName.remove_extensions(science_file),
+                        vlass_name.file_id,
                         '-t 10',
                     )
                     count += 1

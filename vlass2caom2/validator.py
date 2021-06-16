@@ -202,7 +202,7 @@ def get_file_url_list_max_versions(nrao_dict):
     # have the effect of building up a list of URLs of all versions by
     # observation ID
     for key, value in nrao_dict.items():
-        storage_name = VlassName(url=key)
+        storage_name = VlassName(key)
         file_meta = FileMeta(
             key, storage_name.version, value, storage_name.file_name
         )
@@ -279,7 +279,7 @@ class VlassValidator(mc.Validator):
     @staticmethod
     def _later_version_at_cadc(entry, caom_client, metrics):
         later_version_found = False
-        storage_name = VlassName(file_name=entry, entry=entry)
+        storage_name = VlassName(entry)
         caom_at_cadc = clc.repo_get(
             caom_client, COLLECTION, storage_name.obs_id, metrics
         )
@@ -293,7 +293,7 @@ class VlassValidator(mc.Validator):
                         ignore_collection,
                         f_name,
                     ) = mc.decompose_uri(artifact.uri)
-                    vlass_name = VlassName(file_name=f_name)
+                    vlass_name = VlassName(f_name)
                     if vlass_name.version > storage_name.version:
                         # there's a later version at CADC, everything is good
                         # ignore the failure report

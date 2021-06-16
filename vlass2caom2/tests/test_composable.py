@@ -198,7 +198,6 @@ def test_run_state(run_mock, query_mock, data_client_mock):
         assert isinstance(test_storage, VlassName), type(test_storage)
         assert test_storage.obs_id == test_obs_id, 'wrong obs id'
         assert test_storage.file_name == test_f_name, 'wrong file name'
-        assert test_storage.fname_on_disk == test_f_name, 'wrong fname on disk'
         assert test_storage.url.startswith(
             'https://archive-new.nrao.edu/vlass/quicklook/VLASS'
         ), f'wrong url start format {test_storage.url}'
@@ -260,7 +259,7 @@ def test_store(put_mock):
         'VLASS2.1.ql.T10t12.J073401-033000.10.2048.v1.I.iter1.image.'
         'pbcor.tt0.rms.subim.fits'
     )
-    test_storage_name = VlassName(url=test_url, entry=test_url)
+    test_storage_name = VlassName(test_url)
     transferrer = Mock()
     cadc_data_client = Mock()
     observable = mc.Observable(
