@@ -94,6 +94,7 @@ __all__ = [
 
 QL_URL = 'https://archive-new.nrao.edu/vlass/quicklook/'
 QL_WEB_LOG_URL = 'https://archive-new.nrao.edu/vlass/weblog/quicklook/'
+VLASS_CONTEXT = 'vlass_context'
 
 web_log_content = {}
 
@@ -483,7 +484,11 @@ def retrieve_obs_metadata(obs_id):
     mod_obs_id = obs_id.replace('.', '_', 2).replace('_', '.', 1)
     global web_log_content
     if len(web_log_content) == 0:
-        raise mc.CadcException('Must initialize weblog content.')
+        config = mc.Config()
+        config.get_executors()
+        logging.warning('Initializing from /weblog. This may take a while.')
+        state = mc.State(config.state_fqn)
+        init_web_log(state)
     latest_key = None
     max_ts = None
     tz_info = tz.gettz('US/Socorro')
@@ -605,3 +610,16 @@ def query_top_page():
             response.close()
 
     return max_date
+
+
+def init_web_log(state):
+    """Cache content of https:archive-new.nrao.edu/vlass/weblog, because
+    it's large and takes a long time to read. This cached information
+    is how time and provenance metadata is found for the individual
+    observations.
+    """
+    epochs = state.get_context(VLASS_CONTEXT)
+    for key, value in epochs.items():
+        epochs[key] = make_date_time(value)
+        logging.info('Initialize weblog listing from NRAO.')
+    init_web_log_content(epochs)
