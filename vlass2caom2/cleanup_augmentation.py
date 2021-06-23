@@ -81,11 +81,11 @@ def visit(observation, **kwargs):
     of those files are removed.
     """
     mc.check_param(observation, Observation)
-    url = kwargs.get('url')
-    if url is None:
+    science_file = kwargs.get('science_file')
+    if science_file is None or not science_file.startswith('http'):
         logging.error(
             f'Require url for cleanup augmentation of '
-            f'{observation.observation_id}'
+            f'{observation.observation_id}. Got {science_file}.'
         )
         return
 
