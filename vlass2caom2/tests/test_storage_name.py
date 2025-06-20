@@ -2,7 +2,7 @@
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2019.                            (c) 2019.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -66,7 +66,6 @@
 # ***********************************************************************
 #
 
-from caom2pipe import name_builder_composable as nbc
 from vlass2caom2.storage_name import VlassName
 
 
@@ -76,8 +75,8 @@ def test_storage_name(test_config):
         f'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.2v2/T23t09/'
         f'VLASS1.2.ql.T23t09.J083851+483000.10.2048.v1/{test_bit}.subim.fits'
     )
-    ts1 = VlassName(test_url)
-    ts2 = VlassName(f'{test_bit}.subim.fits')
+    ts1 = VlassName([test_url])
+    ts2 = VlassName([f'{test_bit}.subim.fits'])
     for ts in [ts1, ts2]:
         assert ts.obs_id == 'VLASS1.2.T23t09.J083851+483000', 'wrong obs id'
         assert ts.product_id == 'VLASS1.2.T23t09.J083851+483000.quicklook', 'wrong product id'
@@ -99,8 +98,8 @@ def test_storage_name(test_config):
             ts.thumb_uri == f'{test_config.preview_scheme}:{test_config.collection}/{test_bit}.subim_prev_256.jpg'
         ), 'wrong thumbnail uri'
 
-    ts1 = VlassName(test_url)
-    ts2 = VlassName(f'{test_bit}.subim.fits')
+    ts1 = VlassName([test_url])
+    ts2 = VlassName([f'{test_bit}.subim.fits'])
     for ts in [ts1, ts2]:
         assert ts.file_uri == f'{test_config.scheme}:{test_config.collection}/{test_bit}.subim.fits', 'wrong uri'
         assert (
@@ -117,20 +116,18 @@ def test_source_names(test_config):
         f'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.2/T23t09/VLASS1.2.ql.T23t09.J083851+483000.10.2048.v1/'
         f'{test_f_name}'
     )
-    test_subject = nbc.EntryBuilder(VlassName)
-    test_result = test_subject.build(test_url)
+    test_result = VlassName([test_url])
     assert len(test_result.source_names) == 1, 'wrong length'
     assert test_result.source_names[0] == test_url, 'wrong result'
 
-    test_result = test_subject.build(test_f_name)
+    test_result = VlassName([test_f_name])
     assert len(test_result.source_names) == 1, 'wrong length'
     assert test_result.source_names[0] == test_f_name, 'wrong result'
 
 
 def test_csv(test_config):
     test_f_name = 'VLASS2.1.se.T11t35.J231002+033000.06.2048.v1.I.catalog.csv'
-    test_subject = nbc.EntryBuilder(VlassName)
-    test_result = test_subject.build(test_f_name)
+    test_result = VlassName([test_f_name])
     assert test_result is not None, 'expect a result'
     assert test_result.version == 1, 'wrong version'
 
@@ -139,8 +136,7 @@ def test_single_epoch_cube_name(test_config):
     test_f_name = 'VLASS2.1.cc.T10t35.J230600-003000.06.2048.v1.spw10.IQU.iter3.image.pbcor.tt0.rms.subim.fits'
     test_prev_name = test_f_name.replace('.fits', '_prev.jpg')
     test_obs_id = 'VLASS2.1.T10t35.J230600-003000'
-    test_subject = nbc.EntryBuilder(VlassName)
-    test_result = test_subject.build(test_f_name)
+    test_result = VlassName([test_f_name])
     assert test_result is not None, 'expected a result'
     assert test_result.obs_id == test_obs_id, 'obs id'
     assert test_result.product_id == f'{test_obs_id}.channel_cube', 'product id'
@@ -151,8 +147,7 @@ def test_single_epoch_cube_name(test_config):
 def test_catalog(test_config):
     test_f_name = 'VLASS2.1.se.T13t10.J063820+113000.06.2048.v1.I.catalog.csv'
     test_obs_id = 'VLASS2.1.T13t10.J063820+113000'
-    test_subject = nbc.EntryBuilder(VlassName)
-    test_result = test_subject.build(test_f_name)
+    test_result = VlassName([test_f_name])
     assert test_result is not None, 'expected a result'
     assert test_result.obs_id == test_obs_id, 'obs id'
     assert test_result.product_id == f'{test_obs_id}.continuum_catalog', 'product id'

@@ -2,7 +2,7 @@
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2018.                            (c) 2018.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -66,16 +66,14 @@
 # ***********************************************************************
 #
 
+from cadcdata import FileInfo
 from caom2pipe import astro_composable as ac
-from caom2pipe.manage_composable import read_obs_from_file, write_obs_to_file
-from caom2pipe import reader_composable as rdc
+from caom2pipe.manage_composable import ExecutionReporter2, read_obs_from_file, write_obs_to_file
 from vlass2caom2 import catalog_augmentation, fits2caom2_augmentation, storage_name
 from caom2.diff import get_differences
 
 import os
 import pytest
-
-from mock import patch
 
 
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -221,10 +219,9 @@ test_obs = [
 
 
 @pytest.mark.parametrize('test_files', test_obs)
-@patch('caom2utils.data_util.get_local_headers_from_fits')
-def test_visit(header_mock, test_files, test_config, test_data_dir):
+def test_visit(test_files, test_config, test_data_dir, tmp_path, change_test_dir):
+    test_config.change_working_directory(tmp_path)
     obs_id = test_files[0]
-    header_mock.side_effect = ac.make_headers_from_file
     expected_fqn = f'{TEST_DATA_DIR}/{obs_id}.expected.xml'
     expected = None
     if os.path.exists(expected_fqn):
@@ -240,17 +237,19 @@ def test_visit(header_mock, test_files, test_config, test_data_dir):
 
     for f_name in test_files[1:]:
         temp_fqn = f'{TEST_DATA_DIR}/{f_name}'
-        vlass_name = storage_name.VlassName(entry=temp_fqn)
-        metadata_reader = rdc.FileMetadataReader()
-        metadata_reader.set(vlass_name)
+        vlass_name = storage_name.VlassName([temp_fqn])
+        headers = []
         file_type = 'text/csv'
         if '.fits' in temp_fqn:
             file_type = 'application/fits'
-        metadata_reader.file_info[vlass_name.file_uri].file_type = file_type
+            headers = ac.make_headers_from_file(temp_fqn)
+        file_info = FileInfo(id=vlass_name.file_uri, file_type=file_type)
+        vlass_name.file_info = {vlass_name.file_uri: file_info}
+        vlass_name.metadata = {vlass_name.file_uri: headers}
         kwargs = {
             'storage_name': vlass_name,
-            'metadata_reader': metadata_reader,
             'config': test_config,
+            'reporter': ExecutionReporter2(test_config),
         }
         if vlass_name.is_catalog:
             observation = catalog_augmentation.visit(observation, **kwargs)

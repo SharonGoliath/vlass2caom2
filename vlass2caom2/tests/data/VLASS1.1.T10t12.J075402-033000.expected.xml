@@ -46,7 +46,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>9801</caom2:contentLength>
           <caom2:contentChecksum>md5:40f7c2763f92ea6e9c6b0304c569097e</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="00000000-0000-0000-b271-8d5d71e17284">
@@ -136,7 +135,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>9153</caom2:contentLength>
           <caom2:contentChecksum>md5:40f7c2763f92ea6e9c6b0304c569097e</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="00000000-0000-0000-b9fd-146ce1cdc58c">

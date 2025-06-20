@@ -46,7 +46,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>10206</caom2:contentLength>
           <caom2:contentChecksum>md5:d4f3f367045b1e8259b43f055036f171</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="1cb132cc-671c-4c6e-8dba-b704504e5c64">

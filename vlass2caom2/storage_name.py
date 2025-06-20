@@ -2,7 +2,7 @@
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2021.                            (c) 2021.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -93,10 +93,8 @@ class VlassName(mc.StorageName):
     SG - 03-02-21 - use the full fits filename plus _prev/_prev_256 for the preview/thumbnail file names
     """
 
-    def __init__(
-        self,
-        entry=None,
-    ):
+    def __init__(self, source_names):
+        entry = source_names[0]
         temp = urlparse(entry)
         if temp.scheme == '':
             file_name = basename(entry.replace('.header', ''))
@@ -221,6 +219,8 @@ class VlassName(mc.StorageName):
         from the file name.
         """
         bits = file_name.split('.')
+        import logging
+        logging.error(bits)
         return f'{bits[0]}.{bits[1]}.{bits[3]}.{bits[4]}'
 
     @staticmethod

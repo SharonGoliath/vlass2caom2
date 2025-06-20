@@ -2,7 +2,7 @@
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2018.                            (c) 2018.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -80,9 +80,7 @@ from vlass2caom2.storage_name import VlassName
 __all__ = ['mapping_factory']
 
 
-class BlueprintMapping(cc.TelescopeMapping):
-    def __init__(self, storage_name, headers, clients, observable, observation, config):
-        super().__init__(storage_name, headers, clients, observable, observation, config)
+class BlueprintMapping(cc.TelescopeMapping2):
 
     def accumulate_blueprint(self, bp):
         """Configure the VLASS-specific ObsBlueprint for the CAOM model
@@ -151,8 +149,6 @@ class BlueprintMapping(cc.TelescopeMapping):
 
 
 class QuicklookMapping(BlueprintMapping):
-    def __init__(self, storage_name, headers, clients, observable, observation, config):
-        super().__init__(storage_name, headers, clients, observable, observation, config)
 
     def accumulate_blueprint(self, bp):
         """Configure the Quicklook ObsBlueprint for the CAOM model SpatialWCS."""
@@ -239,8 +235,6 @@ class QuicklookMapping(BlueprintMapping):
 
 
 class ContinuumMapping(QuicklookMapping):
-    def __init__(self, storage_name, headers, clients, observable, observation, config):
-        super().__init__(storage_name, headers, clients, observable, observation, config)
 
     def accumulate_blueprint(self, bp, application=None):
         super().accumulate_blueprint(bp)
@@ -262,8 +256,6 @@ class ContinuumMapping(QuicklookMapping):
 
 
 class ChannelCubeMapping(ContinuumMapping):
-    def __init__(self, storage_name, headers, clients, observable, observation, config):
-        super().__init__(storage_name, headers, clients, observable, observation, config)
 
     def accumulate_blueprint(self, bp, application=None):
         super().accumulate_blueprint(bp)
@@ -272,8 +264,8 @@ class ChannelCubeMapping(ContinuumMapping):
 
 
 class Catalog(BlueprintMapping):
-    def __init__(self, storage_name, headers, clients, observable, observation, config):
-        super().__init__(storage_name, headers, clients, observable, observation, config)
+    def __init__(self, storage_name, clients, reporter, observation, config):
+        super().__init__(storage_name, clients, reporter, observation, config)
         self._config = config
         self._provenance_storage_name = None
 
@@ -314,7 +306,7 @@ class Catalog(BlueprintMapping):
                 if 'Gaussian list for' in line:
                     temp = line.split()[-1]
                     if temp is not None:
-                        self._provenance_storage_name = VlassName(temp)
+                        self._provenance_storage_name = VlassName([temp])
                         obs_member_uri_str = mc.CaomName.make_obs_uri_from_obs_id(
                             self._storage_name.collection, self._provenance_storage_name.obs_id
                         )
@@ -379,18 +371,18 @@ class Catalog(BlueprintMapping):
                                 copied_chunk.time_axis = None
 
 
-def mapping_factory(storage_name, headers, clients, observable, observation, config):
+def mapping_factory(storage_name, clients, reporter, observation, config):
     if storage_name.is_single_epoch:
         if storage_name.is_catalog:
-            result = Catalog(storage_name, headers, clients, observable, observation, config)
+            result = Catalog(storage_name, clients, reporter, observation, config)
         else:
-            result = ContinuumMapping(storage_name, headers, clients, observable, observation, config)
+            result = ContinuumMapping(storage_name, clients, reporter, observation, config)
     elif storage_name.is_quicklook:
-        result = QuicklookMapping(storage_name, headers, clients, observable, observation, config)
+        result = QuicklookMapping(storage_name, clients, reporter, observation, config)
     elif storage_name.is_channel_cube:
-        result = ChannelCubeMapping(storage_name, headers, clients, observable, observation, config)
+        result = ChannelCubeMapping(storage_name, clients, reporter, observation, config)
     elif storage_name.is_catalog:
-        result = BlueprintMapping(storage_name, headers, clients, observable, observation, config)
+        result = BlueprintMapping(storage_name, clients, reporter, observation, config)
     else:
         raise mc.CadcException(f'Do not understand {storage_name} for mapping construction.')
     logging.debug(f'Using {result.__class__.__name__} for mapping.')

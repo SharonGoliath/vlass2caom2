@@ -2,7 +2,7 @@
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2020.                            (c) 2020.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -81,13 +81,12 @@ from caom2pipe.data_source_composable import StateRunnerMeta
 from caom2pipe.astro_composable import make_headers_from_file
 from caom2pipe import execute_composable as ec
 from caom2pipe.manage_composable import (
-    Config, make_datetime, Observable, read_obs_from_file, State, TaskType
+    Config, make_datetime, Observable, read_obs_from_file, State, TaskType, write_as_yaml
 )
 from caom2pipe import run_composable, transfer_composable
 from vlass2caom2 import composable, VlassName
 from vlass2caom2.data_source import VlassPages
 from vlass2caom2.storage_name import QL_URL, SE_URL
-from vlass2caom2.tests.test_data_source import _write_state
 
 import test_data_source
 
@@ -675,3 +674,19 @@ def _mock_headers_read_1(ignore):
 
 def _mock_visit(obs, **kwargs):
     return obs
+
+
+def _write_state(start_time_str, f_name, test_config):
+    test_time = make_datetime(start_time_str)
+    test_bookmark = {'bookmarks': {}}
+    for ds in test_config.data_sources:
+        test_bookmark['bookmarks'][ds] = {'last_record': test_time}
+    test_bookmark['context'] = {
+            'vlass_context': {
+                'VLASS1.1': '01-Jan-2018 00:00',
+                'VLASS1.2v2': '01-Nov-2018 00:00',
+                'VLASS2.1': '01-Jul-2020 00:00',
+                'VLASS2.2': '01-Jul-2021 00:00',
+            },
+        }
+    write_as_yaml(test_bookmark, f_name)

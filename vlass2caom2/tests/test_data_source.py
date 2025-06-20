@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 # ***********************************************************************
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2020.                            (c) 2020.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -73,7 +72,7 @@ from os.path import dirname, join, realpath
 from treelib import Tree
 
 from caom2pipe import html_data_source
-from caom2pipe.manage_composable import Config, ExecutionReporter, make_datetime, Observable, State, write_as_yaml
+from caom2pipe.manage_composable import Config, ExecutionReporter, make_datetime, Observable, State
 from vlass2caom2 import data_source
 from vlass2caom2 import storage_name
 
@@ -384,19 +383,3 @@ def _query_continuum_endpoint(url, session, timeout=-1):
     else:
         raise Exception(f'wut? {url}')
     return result
-
-
-def _write_state(start_time_str, f_name, test_config):
-    test_time = make_datetime(start_time_str)
-    test_bookmark = {'bookmarks': {}}
-    for ds in test_config.data_sources:
-        test_bookmark['bookmarks'][ds] = {'last_record': test_time}
-    test_bookmark['context'] = {
-            'vlass_context': {
-                'VLASS1.1': '01-Jan-2018 00:00',
-                'VLASS1.2v2': '01-Nov-2018 00:00',
-                'VLASS2.1': '01-Jul-2020 00:00',
-                'VLASS2.2': '01-Jul-2021 00:00',
-            },
-        }
-    write_as_yaml(test_bookmark, f_name)
