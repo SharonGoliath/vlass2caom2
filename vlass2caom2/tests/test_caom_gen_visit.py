@@ -230,7 +230,6 @@ def test_visit(test_files, test_config, test_data_dir, tmp_path, change_test_dir
     actual_fqn = expected_fqn.replace('expected.xml', 'actual.xml')
     if os.path.exists(actual_fqn):
         os.unlink(actual_fqn)
-    test_config.working_directory = test_data_dir
     observation = None
     if os.path.exists(in_fqn):
         observation = read_obs_from_file(in_fqn)

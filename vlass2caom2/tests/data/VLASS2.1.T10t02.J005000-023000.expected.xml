@@ -45,7 +45,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154190</caom2:contentLength>
           <caom2:contentChecksum>md5:a2bac3f827351fcf9a17440e25825ab2</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="23af09d6-689a-40cf-8579-d01c14a50620">
@@ -134,7 +133,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147686</caom2:contentLength>
           <caom2:contentChecksum>md5:5cff4217d0b65bc2ce97c3247e78c2cf</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="20811a8a-919e-4e6a-bbb8-0579635cea58">
@@ -224,7 +222,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154190</caom2:contentLength>
           <caom2:contentChecksum>md5:eff817e4948712cd55f87b4cea9dd966</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="e242b4b1-0427-4fbe-8a5e-d848030bea81">
@@ -313,7 +310,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147686</caom2:contentLength>
           <caom2:contentChecksum>md5:ca296fc7a105001fcf4081e8c5d2bfbb</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="aaa5cbc0-631f-4060-9dce-b2ba1f8c5c22">
@@ -403,7 +399,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154190</caom2:contentLength>
           <caom2:contentChecksum>md5:e6cb2263f77f724248ceb5885700ee2f</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="46a4d4de-de8b-4c1d-9a0b-6bc0a2237f34">
@@ -492,7 +487,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147686</caom2:contentLength>
           <caom2:contentChecksum>md5:26696953509ce54144221e9a30351601</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="5557f213-2f64-42e3-b97b-9bed118da062">
@@ -582,7 +576,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154190</caom2:contentLength>
           <caom2:contentChecksum>md5:6b5658bcd7c599c7581f8102c4db334c</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="d9e6078f-3131-4298-8c3c-9f6848171527">
@@ -671,7 +664,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147686</caom2:contentLength>
           <caom2:contentChecksum>md5:8fc4a99ee528424f4a9551ac8c569557</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="f4bb0f2f-5f5a-4adc-998d-1a50f3daedd0">
@@ -761,7 +753,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154190</caom2:contentLength>
           <caom2:contentChecksum>md5:0f08f8004c5ebc3a126cf96c8fa3e5d0</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="c8c58d3c-4945-4410-9e76-3e3898029413">
@@ -850,7 +841,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147686</caom2:contentLength>
           <caom2:contentChecksum>md5:f63606d4a591bd16eb6fb3fecca0f4d2</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="dafcc227-390d-4b60-bf45-3a6650e99573">
@@ -940,7 +930,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154190</caom2:contentLength>
           <caom2:contentChecksum>md5:7d5c61024e6aef918a1d2397c5155a7b</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="5dbe39ac-cca7-4384-9a7d-38e0f2e3e97b">
@@ -1029,7 +1018,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147686</caom2:contentLength>
           <caom2:contentChecksum>md5:38ca0a152648008ca90b469cc62b92a8</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="7befb2ba-5dbf-4373-80fa-4f6f784c2989">
@@ -1119,7 +1107,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154188</caom2:contentLength>
           <caom2:contentChecksum>md5:31fb1e1ae581129746f6f5ee047cc70a</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="09265036-a9ea-4d62-b9cb-3c001abd84e4">
@@ -1208,7 +1195,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147685</caom2:contentLength>
           <caom2:contentChecksum>md5:a092c98388b1d05263e004fc1d9113cc</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="33b70863-4c45-4dab-9c65-b964b8902600">
@@ -1298,7 +1284,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154188</caom2:contentLength>
           <caom2:contentChecksum>md5:bac978c2d5e05592f3490e4f52d9c1a4</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="61194166-13ad-4f08-904d-62ab1bea22b5">
@@ -1387,7 +1372,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147685</caom2:contentLength>
           <caom2:contentChecksum>md5:7e6174273d5ea2cce3cc1b832603cda3</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="138acca9-81c5-4adc-ab79-2508f404f2dd">
@@ -1477,7 +1461,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154188</caom2:contentLength>
           <caom2:contentChecksum>md5:fc311e76a79812e3e7906ef702536228</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="0fd717b4-501e-4f5a-b209-7a7e5a345a1a">
@@ -1566,7 +1549,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147685</caom2:contentLength>
           <caom2:contentChecksum>md5:b129324f7ce4561f068db0c8237ae88f</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="36d07eea-2a76-469b-8826-67b5792445e3">
@@ -1656,7 +1638,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147685</caom2:contentLength>
           <caom2:contentChecksum>md5:492b6bc839669500569d90e589d911b8</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="5798e451-0d41-490f-b76b-ff6e3f2d7ba9">
@@ -1746,7 +1727,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154188</caom2:contentLength>
           <caom2:contentChecksum>md5:466cc3dc37bd3da50e1a2ea80b6440cb</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="c47a6a67-642a-4a14-8aa8-17ac8ed904b8">
@@ -1835,7 +1815,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147685</caom2:contentLength>
           <caom2:contentChecksum>md5:cc65a0106656a6b44cde484968ce8b8a</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="024d3338-a2ff-462d-b14d-2e6f27582fd7">
@@ -1925,7 +1904,6 @@
           <caom2:productType>noise</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>154188</caom2:contentLength>
           <caom2:contentChecksum>md5:0682b0a2d035f99b9ab276ac1cd2681e</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="8d4e4ecd-99d9-46bf-9c1b-c850b247917f">
@@ -2014,7 +1992,6 @@
           <caom2:productType>science</caom2:productType>
           <caom2:releaseType>data</caom2:releaseType>
           <caom2:contentType>application/fits</caom2:contentType>
-          <caom2:contentLength>147685</caom2:contentLength>
           <caom2:contentChecksum>md5:97b78b25a70db08fde4d2d3db7b710e2</caom2:contentChecksum>
           <caom2:parts>
             <caom2:part caom2:id="85c92213-101f-401e-989e-403e7b132167">
