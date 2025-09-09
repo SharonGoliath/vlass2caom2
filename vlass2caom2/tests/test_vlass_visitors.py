@@ -2,7 +2,7 @@
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2018.                            (c) 2018.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -109,7 +109,7 @@ def test_aug_visit_works(query_endpoint_mock, get_mock, test_config):
     test_web_log = data_source.WebLogMetadata(test_state, Mock(), [storage_name.QL_URL])
     test_web_log.init_web_log()
     test_name = storage_name.VlassName(
-        'VLASS1.2.ql.T07t13.J081828-133000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits'
+        ['VLASS1.2.ql.T07t13.J081828-133000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits']
     )
     test_file = os.path.join(TEST_DATA_DIR, 'aug_visit_works_start.xml')
     test_obs = read_obs_from_file(test_file)
@@ -146,8 +146,8 @@ def test_aug_visit_quality_works(query_endpoint_mock, get_mock, test_config):
     test_obs = read_obs_from_file(test_file)
     assert test_obs is not None, 'unexpected None'
     test_name = storage_name.VlassName(
-        'https://localhost/VLASS1.2/QA_REJECTED/'
-        'VLASS1.2.ql.T21t15.J141833+413000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits'
+        ['https://localhost/VLASS1.2/QA_REJECTED/'
+         'VLASS1.2.ql.T21t15.J141833+413000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits']
     )
     kwargs = {
         'storage_name': test_name,
@@ -172,7 +172,7 @@ def test_aug_visit_position_bounds():
         )
     test_file = os.path.join(TEST_DATA_DIR, 'fpf_start_obs.xml')
     test_obs = read_obs_from_file(test_file)
-    test_storage_name = storage_name.VlassName(test_input_file)
+    test_storage_name = storage_name.VlassName([test_input_file])
     kwargs = {
         'working_directory': '/test_files',
         'storage_name': test_storage_name,

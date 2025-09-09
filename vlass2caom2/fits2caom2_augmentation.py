@@ -71,8 +71,6 @@ from vlass2caom2 import main_app
 
 
 class VLASSFits2caom2Visitor(cc.Fits2caom2VisitorRunnerMeta):
-    def __init__(self, observation, **kwargs):
-        super().__init__(observation, **kwargs)
 
     def _get_mappings(self, _):
         if not self._storage_name.is_catalog:

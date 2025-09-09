@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 # ***********************************************************************
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2020.                            (c) 2020.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -98,6 +97,7 @@ from logging import getLogger
 from lxml import etree
 
 from caom2pipe.data_source_composable import DataSource
+from coam2pipe.execute_composble import NoFheadStoreVisitRunnerMeta
 from caom2pipe import html_data_source
 from caom2pipe.manage_composable import make_datetime, query_endpoint_session
 from vlass2caom2 import storage_name
@@ -133,13 +133,14 @@ class NraoPages(DataSource):
     The collection of VlassImagePage instances that are used to scrape the NRAO VLASS site.
     """
 
-    def __init__(self, config, session):
+    def __init__(self, config, session, web_log_metadata, storage_name_ctor):
         super().__init__(config)
         self._data_sources = []
         self._end_dt = None
         templates = VlassHtmlTemplate(config)
         for url in config.data_sources:
-            self._data_sources.append(VlassPages(config, url, templates, session))
+            self._data_sources.append(VlassPages(config, url, templates, session, storage_name_ctor))
+        self._web_log_metadata = web_log_metadata
 
     @property
     def data_sources(self):
@@ -270,10 +271,10 @@ class VlassHtmlTemplate(html_data_source.HtmlFilteredPagesTemplate):
             self._logger.warning(f'Removed {len(delete_these)} URLs from list.')
 
 
-class VlassPages(html_data_source.HttpDataSource):
+class VlassPages(html_data_source.HttpDataSourceRunnerMeta):
 
-    def __init__(self, config, start_key, html_filters, session):
-        super().__init__(config, start_key, html_filters, session)
+    def __init__(self, config, start_key, html_filters, session, storage_name_ctor):
+        super().__init__(config, start_key, html_filters, session, storage_name_ctor)
         self._epochs = None
         self._session = session
         # override the HttpdDataSource._data_sources so that it does not treat all the NRAO image pages the same.
@@ -421,3 +422,9 @@ class WebLogMetadata:
         result['Observation Start'] = result['Observation Start'].split('\xa0')[0]
         result['Observation End'] = result['Observation End'].split('\xa0')[0]
         return result
+
+
+class VLASSNoFheadStoreVisitRunnerMeta(NoFheadStoreVisitRunnerMeta):
+
+    def _set_preconditions(self):
+        pass

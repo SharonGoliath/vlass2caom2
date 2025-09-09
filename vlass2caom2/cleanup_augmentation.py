@@ -2,7 +2,7 @@
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2020.                            (c) 2020.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -93,12 +93,12 @@ def visit(observation, **kwargs):
             # first - get the newest version
             max_version = 1
             for artifact in plane.artifacts.values():
-                version = sn.VlassName(artifact.uri).version
+                version = sn.VlassName([artifact.uri]).version
                 max_version = max(max_version, version)
 
             # now collect the list of artifacts not at the maximum version
             for artifact in plane.artifacts.values():
-                version = sn.VlassName(artifact.uri).version
+                version = sn.VlassName([artifact.uri]).version
                 if version != max_version:
                     temp.append(artifact.uri)
 

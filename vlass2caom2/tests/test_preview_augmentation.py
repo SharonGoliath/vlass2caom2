@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 # ***********************************************************************
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2020.                            (c) 2020.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -80,7 +79,7 @@ def test_preview_augmentation(access_mock, test_data_dir, test_config):
     access_mock.return_value = 'https://localhost'
     test_fqn = f'{test_data_dir}/preview_augmentation_start.xml'
     test_science_f_name = 'VLASS1.1.ql.T01t01.J000228-363000.10.2048.v1.I.iter1.image.pbcor.' 'tt0.subim.fits'
-    test_storage_name = VlassName(test_science_f_name)
+    test_storage_name = VlassName([test_science_f_name])
     test_obs = read_obs_from_file(test_fqn)
     test_config.change_working_directory(test_data_dir)
     test_observable = Observable(test_config)

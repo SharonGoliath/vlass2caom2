@@ -2,7 +2,7 @@
 # ******************  CANADIAN ASTRONOMY DATA CENTRE  *******************
 # *************  CENTRE CANADIEN DE DONNÉES ASTRONOMIQUES  **************
 #
-#  (c) 2018.                            (c) 2018.
+#  (c) 2025.                            (c) 2025.
 #  Government of Canada                 Gouvernement du Canada
 #  National Research Council            Conseil national de recherches
 #  Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
@@ -92,6 +92,27 @@ META_VISITORS = [
 DATA_VISITORS = [catalog_augmentation, position_bounds_augmentation, preview_augmentation, cleanup_augmentation]
 
 
+# def _common_init():
+#     config = mc.Config()
+#     config.get_executors()
+#     rc.set_logging(config)
+#     mc.StorageName.collection = config.collection
+#     mc.StorageName.scheme = config.scheme
+#     state = mc.State(config.state_fqn, config.time_zone)
+#     session = mc.get_endpoint_session()
+#     web_log_metadata = data_source.WebLogMetadata(state, session, config.data_sources)
+#     data_sources = None
+#     metadata_reader = None
+#     clients = None
+#     if mc.TaskType.SCRAPE not in config.task_types and not config.use_local_files:
+#         data_sources = data_source.NraoPages(config, session).data_sources
+#         clients = client_composable.ClientCollection(config)
+#         metadata_reader = reader.VlassStorageMetadataReader(clients.data_client, web_log_metadata)
+
+#     name_builder = nbc.EntryBuilder(storage_name.VlassName)
+#     return config, metadata_reader, data_sources, name_builder, clients
+
+
 def _common_init():
     config = mc.Config()
     config.get_executors()
@@ -102,15 +123,13 @@ def _common_init():
     session = mc.get_endpoint_session()
     web_log_metadata = data_source.WebLogMetadata(state, session, config.data_sources)
     data_sources = None
-    metadata_reader = None
     clients = None
     if mc.TaskType.SCRAPE not in config.task_types and not config.use_local_files:
-        data_sources = data_source.NraoPages(config, session).data_sources
+        data_sources = data_source.NraoPages(config, session, web_log_metadata, storage_name.VlassName).data_sources
         clients = client_composable.ClientCollection(config)
-        metadata_reader = reader.VlassStorageMetadataReader(clients.data_client, web_log_metadata)
+        # metadata_reader = reader.VlassStorageMetadataReader(clients.data_client, web_log_metadata)
 
-    name_builder = nbc.EntryBuilder(storage_name.VlassName)
-    return config, metadata_reader, data_sources, name_builder, clients
+    return config, data_sources, clients
 
 
 def _run_state():
@@ -121,16 +140,15 @@ def _run_state():
     'QA_REJECTED' is the only way to tell if the attribute 'requirements'
     should be set to 'fail', or not.
     """
-    config, metadata_reader, data_sources, name_builder, clients = _common_init()
-    return rc.run_by_state(
+    config, data_sources, clients = _common_init()
+    return rc.run_by_state_runner_meta(
         config=config,
         meta_visitors=META_VISITORS,
         data_visitors=DATA_VISITORS,
-        name_builder=name_builder,
         sources=data_sources,
         store_transfer=tc.HttpTransfer(),
-        metadata_reader=metadata_reader,
         clients=clients,
+        storage_name_ctor=storage_name.VlassName,
     )
 
 
@@ -155,15 +173,14 @@ def _run():
     :return 0 if successful, -1 if there's any sort of failure. Return status
         is used by airflow for task instance management and reporting.
     """
-    config, metadata_reader, ignore_sources, name_builder, clients = _common_init()
-    return rc.run_by_todo(
+    config, _, clients = _common_init()
+    return rc.run_by_todo_runner_meta(
         config=config,
-        name_builder=name_builder,
         meta_visitors=META_VISITORS,
         data_visitors=DATA_VISITORS,
         store_transfer=tc.HttpTransfer(),
-        metadata_reader=metadata_reader,
         clients=clients,
+        storage_name_ctor=storage_name.VlassName,
     )
 
 

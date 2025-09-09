@@ -77,7 +77,7 @@ from unittest.mock import ANY, call, patch, Mock, PropertyMock
 
 from cadcutils import exceptions
 from cadcdata import FileInfo
-from caom2pipe.data_source_composable import StateRunnerMeta
+from caom2pipe.data_source_composable import RunnerMeta
 from caom2pipe.astro_composable import make_headers_from_file
 from caom2pipe import execute_composable as ec
 from caom2pipe.manage_composable import (
@@ -120,22 +120,28 @@ def test_run_by_builder(exec_mock, clients_mock, test_config, tmp_path, change_t
 
 aa = deque(
     [
-        StateRunnerMeta(
-            'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.1/T07t13/'
-            'VLASS1.1.ql.T07t13.J083838-153000.10.2048.v1/'
-            'VLASS1.1.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits',
+        RunnerMeta(
+            VlassName(
+                ['https://archive-new.nrao.edu/vlass/quicklook/VLASS1.1/T07t13/'
+                 'VLASS1.1.ql.T07t13.J083838-153000.10.2048.v1/'
+                 'VLASS1.1.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits'],
+            ),
             datetime(2019, 4, 24, 12, 34),
         ),
-        StateRunnerMeta(
-            'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.2/T07t13/'
-            'VLASS1.2.ql.T07t13.J083838-153000.10.2048.v1/'
-            'VLASS1.2.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits',
+        RunnerMeta(
+            VlassName(
+                ['https://archive-new.nrao.edu/vlass/quicklook/VLASS1.2/T07t13/'
+                 'VLASS1.2.ql.T07t13.J083838-153000.10.2048.v1/'
+                 'VLASS1.2.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits'],
+            ),
             datetime(2019, 4, 24, 12, 34) - timedelta(seconds=2000),
         ),
-        StateRunnerMeta(
-            'https://archive-new.nrao.edu/vlass/quicklook/VLASS2.1/T07t13/'
-            'VLASS2.1.ql.T07t13.J083838-153000.10.2048.v1/'
-            'VLASS2.2.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits',
+        RunnerMeta(
+            VlassName(
+                ['https://archive-new.nrao.edu/vlass/quicklook/VLASS2.1/T07t13/'
+                 'VLASS2.1.ql.T07t13.J083838-153000.10.2048.v1/'
+                 'VLASS2.2.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits'],
+            ),
             datetime(2019, 4, 25, 12, 34),
         ),
      ],
@@ -167,22 +173,20 @@ def test_run_state(
     start_dt = make_datetime('24Apr2019 12:34')
     State.write_bookmark(test_config.state_fqn, QL_URL, start_dt)
     try:
-        test_config, test_metadata_reader, test_sources, test_name_builder, ignore_clients = composable._common_init()
-        test_metadata_reader._client = client_mock.data_client
-        test_result = run_composable.run_by_state(
+        test_config, test_sources, _ = composable._common_init()
+        test_result = run_composable.run_by_state_runner_meta(
             config=test_config,
             meta_visitors=composable.META_VISITORS,
             data_visitors=composable.DATA_VISITORS,
-            name_builder=test_name_builder,
             sources=test_sources,
             store_transfer=transfer_composable.HttpTransfer(),
-            metadata_reader=test_metadata_reader,
             clients=client_mock,
+            storage_name_ctor=VlassName,
         )
         assert test_result == 0, 'mocking correct execution'
 
         assert run_mock.called, 'should have been called'
-        args, kwargs = run_mock.call_args
+        args, _ = run_mock.call_args
         test_storage = args[0]
         assert isinstance(test_storage, VlassName), type(test_storage)
         assert test_storage.obs_id == test_obs_id, 'wrong obs id'
@@ -206,10 +210,12 @@ def test_run_state(
 dd = datetime(2019, 4, 24, 13, 34)
 c = deque(
     [
-        StateRunnerMeta(
-            'https://archive-new.nrao.edu/vlass/quicklook/VLASS1.1/'
-            'T07t13/VLASS1.1.ql.T07t13.J083838-153000.10.2048.v1/'
-            'VLASS1.1.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits',
+        RunnerMeta(
+            VlassName(
+                ['https://archive-new.nrao.edu/vlass/quicklook/VLASS1.1/'
+                 'T07t13/VLASS1.1.ql.T07t13.J083838-153000.10.2048.v1/'
+                 'VLASS1.1.ql.T07t13.J083838-153000.10.2048.v1.I.iter1.image.pbcor.tt0.subim.fits'],
+            ),
             dd
         ),
     ],
@@ -220,7 +226,7 @@ end_dt_count = 0
 
 @patch('vlass2caom2.data_source.VlassPages')
 @patch('caom2pipe.client_composable.ClientCollection')
-@patch('caom2pipe.execute_composable.OrganizeExecutes.do_one')
+@patch('caom2pipe.execute_composable.OrganizeExecutesRunnerMeta.do_one')
 def test_run_state_as_composable(run_mock, client_mock, m, test_config, tmp_path, change_test_dir):
     # differs from run_state as it relies on composable.py execution, instead of mimicking it
 
@@ -278,7 +284,7 @@ zero_records_test_time = datetime(2019, 4, 27)
 @patch('caom2pipe.client_composable.ClientCollection')
 @patch('vlass2caom2.data_source.VlassPages.get_time_box_work')
 @patch('vlass2caom2.data_source.VlassPages._initialize_end_dt')
-@patch('caom2pipe.execute_composable.OrganizeExecutes.do_one')
+@patch('caom2pipe.execute_composable.OrganizeExecutesRunnerMeta.do_one')
 @patch(
     'caom2pipe.html_data_source.HttpDataSource.end_dt', new_callable=PropertyMock(return_value=zero_records_test_time)
 )
@@ -304,17 +310,15 @@ def test_run_state_zero_records(
 
     try:
         # execution
-        test_config, test_metadata_reader, test_sources, test_name_builder, ignore_clients = composable._common_init()
-        test_metadata_reader._client = client_mock.data_client
-        test_result = run_composable.run_by_state(
+        test_config, test_sources, _ = composable._common_init()
+        test_result = run_composable.run_by_state_runner_meta(
             config=test_config,
             meta_visitors=composable.META_VISITORS,
             data_visitors=composable.DATA_VISITORS,
-            name_builder=test_name_builder,
             sources=test_sources,
             store_transfer=transfer_composable.HttpTransfer(),
-            metadata_reader=test_metadata_reader,
             clients=client_mock,
+            storage_name_ctor=VlassName,
         )
         assert test_result == 0, 'mocking correct execution'
         assert not run_mock.called, 'zero records, should not have been called'
@@ -334,7 +338,8 @@ info_count = 0
 
 
 @patch(
-    'caom2pipe.html_data_source.HttpDataSource.end_dt', new_callable=PropertyMock(return_value=datetime(2020, 4, 19))
+    'caom2pipe.html_data_source.HttpDataSourceRunnerMeta.end_dt', 
+    new_callable=PropertyMock(return_value=datetime(2020, 4, 19)),
 )
 @patch('vlass2caom2.preview_augmentation.visit')
 @patch('vlass2caom2.time_bounds_augmentation.visit')
@@ -364,23 +369,22 @@ def test_run_state_store_ingest(
     test_config.retry_count = 1
     test_config.retry_decay = 0
     test_config.log_to_file = True
-    test_config.interval = 1200
+    test_config.interval = 19200
+    test_config.logging_level = 'DEBUG'
     test_config.write_to_file(test_config)
     _write_state('22Apr2019 12:34', test_config.state_fqn, test_config)
 
     query_mock.side_effect = test_data_source._query_quicklook_endpoint
     client_mock.metadata_client.read.return_value = None
-    test_config, test_metadata_reader, test_sources, test_name_builder, ignore_clients = composable._common_init()
-    test_metadata_reader._client = client_mock.data_client
-    test_result = run_composable.run_by_state(
+    test_config, test_sources, _ = composable._common_init()
+    test_result = run_composable.run_by_state_runner_meta(
         config=test_config,
         meta_visitors=composable.META_VISITORS,
         data_visitors=composable.DATA_VISITORS,
-        name_builder=test_name_builder,
         sources=test_sources,
         store_transfer=transferrer_mock,
-        metadata_reader=test_metadata_reader,
         clients=client_mock,
+        storage_name_ctor=VlassName,
     )
     assert test_result is not None, 'expect result'
     assert test_result == -1, 'expect failure, because of the retries'

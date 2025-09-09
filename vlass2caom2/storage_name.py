@@ -219,8 +219,8 @@ class VlassName(mc.StorageName):
         from the file name.
         """
         bits = file_name.split('.')
-        import logging
-        logging.error(bits)
+        # import logging
+        # logging.error(bits)
         return f'{bits[0]}.{bits[1]}.{bits[3]}.{bits[4]}'
 
     @staticmethod
